@@ -1,0 +1,58 @@
+---
+title: "Drivers"
+author: "Ben Lehmnn"
+date: "2023-03-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+We will do the cleaning here
+```{r cars}
+library(tidyverse)
+library(ggplot2)
+
+drivers = read_csv("~/DS202RWork/bad-drivers.csv")
+
+#Change the Column Names
+colnames(drivers)[2] = "drivers_involved_in_fatal_collisions"
+colnames(drivers)[3] = "percent_fatal_speeding"
+colnames(drivers)[4] = "percent_fatal_drunk"
+colnames(drivers)[5] = "percent_fatal_not_distracted"
+colnames(drivers)[6] = "percent_not_involved_previous_accidents"
+colnames(drivers)[7] = "Insurance_Premiums"
+colnames(drivers)[8] = "Losses_by_insurance_collisions"
+
+order_driver = drivers[order(drivers$drivers_involved_in_fatal_collisions),]
+order_speed = drivers[order(drivers$percent_fatal_speeding),]
+
+#Get the Mean Value
+mean_speeding = mean(drivers$percent_fatal_speeding)
+mean_prem = mean(drivers$Insurance_Premiums)
+
+high_prem = filter(drivers, Insurance_Premiums > mean_prem)
+low_prem = filter(drivers, Insurance_Premiums < mean_prem)
+
+#ggplot(data=order_driver, aes(x=State, y=drivers_involved_in_fatal_collisions)) + geom_col()+ theme(axis.text.x = element_text(angle=65, vjust=0.6))
+```
+
+```{r}
+drivers %>% ggplot(aes(x=Insurance_Premiums)) + geom_density(fill="#69b3a2", color="#e9ecef", alpha=0.8)
+```
+
+
+
+
+
+Highest Insurance Premium
+```{r pressure, echo=FALSE}
+ggplot(data=high_prem, aes(x=State, y=Insurance_Premiums)) + geom_col()+theme(axis.text.x = element_text(angle=65, vjust=0.6))
+```
+```{r}
+ggplot(data=low_prem, aes(x=State, y=Insurance_Premiums)) + geom_col()+theme(axis.text.x = element_text(angle=65, vjust=0.6))
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
