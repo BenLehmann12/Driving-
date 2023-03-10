@@ -28,6 +28,8 @@ colnames(drivers)[8] = "Losses_by_insurance_collisions"
 
 order_driver = drivers[order(drivers$drivers_involved_in_fatal_collisions),]
 order_speed = drivers[order(drivers$percent_fatal_speeding),]
+drunk = drivers[order(drivers$percent_fatal_drunk),]
+not_dist = drivers[order(drivers$percent_fatal_not_distracted),]
 
 #Get the Mean Value
 mean_speeding = mean(drivers$percent_fatal_speeding)
